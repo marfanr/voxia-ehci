@@ -3,8 +3,7 @@ CPP_FILES := $(shell find . -type f -name '*.cpp')
 OBJ := $(CPP_FILES:.cpp=.o)
 ROOT ?= $(realpath $(dirname $(realpath $0)))
 
-
-LIB_INCLUDE_DIR := $(ROOT)/library/
+LIB_INCLUDE_DIR := $(ROOT)/library/ioforge/include/
 
 OUT_DIR ?= $(ROOT)/build/modules
 MODULE_NAME := ehci
@@ -17,10 +16,10 @@ LD := ld
 CXXFLAGS := -Wall -Wextra -O2 -pipe \
     -ffreestanding -nostdlib -fno-exceptions -fno-rtti -fno-builtin \
     -fno-use-cxa-atexit -fno-asynchronous-unwind-tables -fno-common \
-    -mno-red-zone -std=c++20 -ggdb -g \
-    -I$(LIB_INCLUDE_DIR)
+    -mno-red-zone -std=c++20 -ggdb -g -fPIC \
+    -I$(LIB_INCLUDE_DIR) -I .
 
-LDFLAGS := -shared -m elf_x86_64 -e module_init
+LDFLAGS := -shared -m elf_x86_64 -e module_init -L $(ROOT)/library/ioforge -lioforge
 
 .PHONY: all clean
 
